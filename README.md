@@ -65,6 +65,19 @@ where energy is defined as:
 
 $$E = \frac{p^2}{2m} = \frac{(\hbar k_0)^2}{2m}$$
 
+## Struktur Folder
+```bash
+Quantum-Tunelling-Simulation/
+├── src/
+│   └── 1. Simulation Set-up.py
+│   └── 2. Potential Barrier.py
+│   └── 3. Initial Wave Packet.py
+│   └── 4. Split-Step Fourier Method.py
+│   └── 5. Animation Set-up.py
+├── README.md
+└── requirements.txt
+```
+
 ## How to Use
 1. Copy the script
    ```bash
