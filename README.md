@@ -2,83 +2,83 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)]()
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
-Repositori ini berisi simulasi numerik untuk fenomena Quantum Tunneling menggunakan Persamaan Schrödinger bergantung waktu (Time-Dependent Schrödinger Equation - TDSE). Simulasi ini memvisualisasikan paket gelombang Gaussian yang menabrak penghalang potensial persegi.
+This repository contains a numerical simulation of the Quantum Tunneling phenomenon using the Time-Dependent Schrödinger Equation (TDSE). The simulation visualizes a Gaussian wave packet impacting a rectangular potential barrier.
 
-## Fitur Utama
-Metode Numerik: 
-- Menggunakan algoritma Split-Step Fourier Method yang efisien dan stabil secara energi (unitary).
-- Menghasilkan animasi .gif yang menunjukkan evolusi probabilitas densitas ∣Ψ(x,t)∣
-- Pengguna dapat dengan mudah mengubah tinggi penghalang (V_0), lebar penghalang, dan energi paket gelombang.
+## Main Fiture
+Numerical Method :
+- Utilizes the Split-Step Fourier Method algorithm, which is efficient and energy-stable (unitary)
+- Generates a .gif animation showing the evolution of probability density ∣Ψ(x,t)∣
+- Users can easily modify the barrier height ($V_0$), barrier width, and wave packet energy.
 
+## Brief Theory
 
-## Teori Singkat
-
-Simulasi ini menyelesaikan Persamaan Schrödinger Bergantung Waktu (TDSE) untuk partikel non-relativistik dalam satu dimensi:
+This simulation solves the Time-Dependent Schrödinger Equation (TDSE) for a non-relativistic particle in one dimension:
 
 $$i\hbar \frac{\partial}{\partial t} \Psi(x,t) = \hat{H} \Psi(x,t)$$
 
-Dimana operator Hamiltonian $\hat{H}$ didefinisikan sebagai:
+Where the Hamiltonian operator $\hat{H}$ is defined as:
 
 $$\hat{H} = -\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V(x)$$
 
-### Metode Split-Step Fourier
 
-Untuk evolusi waktu numerik, kita menggunakan operator propagasi:
+### Split-Step Fourier Method
+
+For numerical time evolution, we use the propagation operator:
 
 $$\Psi(x, t + \Delta t) \approx e^{-\frac{iV\Delta t}{2\hbar}} e^{-\frac{i\hat{T}\Delta t}{\hbar}} e^{-\frac{iV\Delta t}{2\hbar}} \Psi(x, t)$$
 
-Simulasi ini membagi langkah waktu $\Delta t$ menggunakan teknik **Strang Splitting** karena operator energi kinetik ($\hat{T}$) dan energi potensial ($V$) tidak komutatif. Teknik ini sangat penting untuk meminimalkan galat numerik dan menjaga simulasi tetap akurat (orde kedua).
-Proses satu langkah waktu ($\Delta t$) dilakukan dalam tiga tahap:
+The simulation divides the time step $\Delta t$ using the Strang Splitting technique because the kinetic energy ($\hat{T}$) and potential energy ($V$) operators do not commute. This technique is crucial for minimizing numerical errors and maintaining simulation accuracy (second-order).
+The process for a single time step ($\Delta t$) is carried out in three stages :
 
-1.  **Langkah Potensial ($\Delta t/2$)**
+1. **Potential Step ($\Delta t/2$)**
 
-    Memberikan kick potensial pada fungsi gelombang di ruang posisi. Langkah ini mengubah fase kompleks $\Psi$ berdasarkan nilai $V(x)$ tanpa mengubah posisi partikel.
+   Applies a potential "kick" to the wave function in position space. This step changes the complex phase of $\Psi$ based on the value of $V(x)$ without changing the particle's position.
 
-4.  **Langkah Kinetik ($\Delta t$)**
+3. **Kinetic Step ($\Delta t$)**
 
-    Pada tahap ini, partikel digerakkan. Kita menggunakan transformasi karena operator kinetik sulit dihitung di ruang posisi : 
-    - FFT : Mengubah $\Psi$ dari ruang posisi ke ruang momentum ($k$-space).
-    - Propagasi : Di ruang momentum, operator kinetik menjadi perkalian sederhana dengan fase $e^{-i\frac{\hbar k^2}{2m}\Delta t}$.
-    - IFFT : Mengembalikan fungsi gelombang kembali ke ruang posisi.
+   In this stage, the particle moves. We use transformations because the kinetic operator is difficult to calculate in position space :
+   - FFT : Transform $\Psi$ from position space to momentum space ($k$-space).
+   - Propagation : In momentum space, the kinetic operator becomes a simple multiplication by the phase $e^{-i\frac{\hbar k^2}{2m}\Delta t}$.
+   - IFFT : Returns the wave function back to position space.
 
-6.  **Langkah Potensial ($\Delta t/2$)**
+6.  **Potential Step ($\Delta t/2$)**
 
-    Memberikan kick potensial terakhir untuk melengkapi satu siklus langkah waktu secara simetris.
+    Applies the final potential kick to complete one time-step cycle symmetrically.
 
-> **Mengapa menggunakan FFT?**
-> Menghitung turunan kedua (energi kinetik) di ruang posisi secara numerik cenderung lambat dan tidak stabil. Dengan Fast Fourier Transform (FFT), operasi turunan berubah menjadi perkalian biasa yang jauh lebih efisien secara komputasi dan menjamin hukum kekekalan probabilitas tetap terjaga.
+> **Why use FFT?**
+> Calculating the second derivative (kinetic energy) in position space numerically tends to be slow and unstable. With the Fast Fourier Transform (FFT), the derivative operation is converted into a standard multiplication, which is much more computationally efficient and ensures that the law of conservation of probability is maintained.
 
-## Parameter yang Bisa Diubah
-Anda dapat bereksperimen dengan nilai berikut di dalam kode:
-- `V0`= Tinggi penghalang 
-- `k0`= Kecepatan/Momentum paket gelombang
-- `a` = Lebar penghalang .
+## Adjustable Parameters
+You can experiment with the following values in the code:
+- `V0`= Barrier height 
+- `k0`= Wave packet velocity/momentum
+- `a` = Barrier width
 
 Hint : 
-| Skenario | Energi ($E$) | Potensial ($V_0$) | Prediksi Fisika |
+| Scenario | Energy ($E$) | Potential ($V_0$) | Prediction |
 | :--- | :--- | :--- | :--- |
-| **Tunneling** | $E < V_0$ | Tinggi | Sebagian kecil bocor lewat penghalang. |
-| **Transmisi** | $E > V_0$ | Rendah | Partikel lewat dengan perubahan fase. |
-| **Refleksi** | $E \ll V_0$ | Sangat Tinggi | Partikel terpantul sempurna. |
+| **Tunneling** | $E < V_0$ | High | A small fraction leaks through the barrier |
+| **Transmisi** | $E > V_0$ | Medium | Particle passes through with a phase change. |
+| **Refleksi** | $E \ll V_0$ | Very high| Particle is perfectly reflected |
 
-dengan energi didefinisikan sebagai:
+where energy is defined as:
 
 $$E = \frac{p^2}{2m} = \frac{(\hbar k_0)^2}{2m}$$
 
-## Cara Penggunaan
-1. Salin skrip
+## How to Use
+1. Copy the script
    ```bash
-   ....py.
+   Quantum-Tunelling-Simulation.py
    ```
-2. Install depedensi
+2. Install dependencies
    ```bash
    pip install -r requirements.txt
    ```
-4. Jalankan skrip
+4. Run the script
    ```bash
    python quantum_tunneling.py
    ```
-5. Program akan melakukan kalkulasi langkah waktu dan menampilkan progres pembuatan frame.
-6. Setelah selesai, sebuah file bernama quantum_tunneling_animation.gif akan muncul pada direktori.
+5. The program will perform time-step calculations and display the progress of frame generation.
+6. Once completed, a file named quantum_tunneling_animation.gif will appear in the directory.
 
 
